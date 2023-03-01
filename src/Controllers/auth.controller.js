@@ -1,7 +1,7 @@
 import db from "../Config/db.js";
 import { v4 as uuid } from 'uuid'
 
-const  singUp = async (req, res)=>{
+const  signUp = async (req, res)=>{
     const {email, password, name} = req.body;
     try {
       await db.query( `INSERT INTO users (name, email, password) VALUES ($1, $2, $3);`,
@@ -11,7 +11,8 @@ const  singUp = async (req, res)=>{
       res.status(500).send(error.message)
     }
 }
-const singIn = async (req, res)=>{
+
+const signIn = async (req, res)=>{
   const { email, password } = req.body
 
   try {
@@ -28,4 +29,4 @@ const singIn = async (req, res)=>{
     res.status(500).send(error.message)
   }
 }
-export {singUp, singIn};
+export {signUp, signIn};
