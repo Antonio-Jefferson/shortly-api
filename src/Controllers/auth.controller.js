@@ -8,16 +8,17 @@ const  signUp = async (req, res)=>{
       [name, email, password])
       res.status(201).send()
     } catch (error) {
+      console.log(error)
       res.status(500).send(error.message)
     }
 }
 
 const signIn = async (req, res)=>{
   const { email, password } = req.body
-
+  console.log('cheguei aqui')
   try {
-    let token = uuid;
-    const result = await db.query(`SELECT * FROM users WHERE email = $1`, [email])
+    let token = uuid();
+    const result = await db.query(`SELECT * FROM users WHERE email = $1 AND password = $2`, [email, password])
     const user_id = result.rows[0].id
     if(result.rowCount > 0){
       await db.query(`INSERT INTO sessions (user_id, token) VALUES ($1, $2);`,
