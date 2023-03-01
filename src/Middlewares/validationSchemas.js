@@ -1,20 +1,29 @@
 import db from "../Config/db.js"
 
- const  validatSchemas = (schema)=> {
-    return (req, res, next) => {
-      const {email, password} = req.body
-      const result =  db.query(`SELECT * FROM users WHERE email = $1;`, [email,]);
-
-      if(result.rowCount > 0) return res.status(409).send({ message: "email já existente" })
-      
-      const { error } = schema.validate(req.body,{ abortEarly: false })
-      if (error) {
-        const errorMessages = error.details.map(err => err.message)
-        return res.status(422).send(errorMessages)
+ const  validatUser = async (req, res, next)=> { 
+      const {email} = req.body
+      try {
+        const result = await db.query(`SELECT * FROM users WHERE email = $1`, [email])
+        if(result.rowCount > 0) return res.status(409).send("usuario já existente")
+        next();
+      } catch (error) {
+        res.status(500).send(error.message);
       }
-      next()
-    }
   }
+  const signInValidation = async (req, res, next) => {
+    const { email, password } = req.body;
+    try {
+      const result = await db.query(`SELECT * FROM users WHERE email = $1`, [email]);
+      if (!result.rows[0] || result.rows[0].password !== password) {
+        res.status(401).send("Email ou senha incorretos");
+      } else {
+       
+        next();
+      }
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
+  };
   
   const validateId = async (req, res, next) => {
     const { id } = req.params;
@@ -32,4 +41,4 @@ import db from "../Config/db.js"
 
 
 
-  export {validatSchemas, validateId}
+  export {validatUser, signInValidation, validateId}
