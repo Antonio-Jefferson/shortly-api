@@ -4,8 +4,8 @@ import db from "../Config/db.js"
 
 const isertShortUrl = async (req,res)=> {
     const {url} = req.body
-    const userId = res.locals.token 
-	console.log(userId)
+    const {user_id}  = res.locals.token;
+	const userId = user_id
     try {
 		const shortUrl = nanoid(8);
 		const { rows } = await db.query(`INSERT INTO shortens (url, short_url, user_id) VALUES ($1, $2, $3) RETURNING id, short_url AS "shortUrl"`,[url, shortUrl, userId]
