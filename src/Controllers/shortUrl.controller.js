@@ -8,7 +8,7 @@ const isertShortUrl = async (req,res)=> {
 	console.log(userId)
     try {
 		const shortUrl = nanoid(8);
-		const { rows } = await db.query(`INSERT INTO shortens (url, short_url, user_id) VALUES ($1, $2, $3) RETURNING id, short_url`,[url, shortUrl, userId]
+		const { rows } = await db.query(`INSERT INTO shortens (url, short_url, user_id) VALUES ($1, $2, $3) RETURNING id, short_url AS "shortUrl"`,[url, shortUrl, userId]
 		);
 		console.log(rows)
 		res.status(201).send(rows[0]);
