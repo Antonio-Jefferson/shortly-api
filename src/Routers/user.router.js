@@ -1,10 +1,11 @@
 import {Router} from "express";
-import { getByIdUser } from "../Controllers/user.controller.js";
-import { auth, authValidation } from "../Middlewares/auth.middlewarre.js";
+import { getByIdUser, getRanking } from "../Controllers/user.controller.js";
+import { auth } from "../Middlewares/auth.middlewarre.js";
 
 
 const userRouter = Router();
 
 userRouter.get("/users/me", auth, getByIdUser )
+userRouter.get("/ranking", getRanking )
 
 export default userRouter;

@@ -43,7 +43,7 @@ export const getByIdUser = async (req, res) => {
 export const getRanking = async (_, res) => {
     try {
         const { rows } = await db.query(`
-                SELECT 
+        SELECT 
             u.id,
             u.name,
             COALESCE(COUNT(DISTINCT s.id), 0) as linksCount,
@@ -63,6 +63,8 @@ export const getRanking = async (_, res) => {
             u.id
         ORDER BY 
             u.id
+        LIMIT
+            10
         `);
         res.status(200).send(rows);
     } catch (error) {
