@@ -52,10 +52,9 @@ const visitUrl = async (req, res)=>{
 			return res.sendStatus(401);
 		}
 		await db.query(`DELETE FROM shortens WHERE id = $1`, [id]);
-		res.sendStatus(204);
-	} catch (e) {
-		console.log(e);
-		res.status(500).send("Internal Server Error");
+		res.status(204).send();
+	} catch (error) {
+		res.status(500).send(error.message);
 	}
 
 }
