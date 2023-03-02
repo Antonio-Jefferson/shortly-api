@@ -28,8 +28,6 @@ const showUrl = (_, res)=>{
 
 const visitUrl = async (req, res)=>{
     const { id, url } = res.locals.url;
-	console.log(id)
-	console.log(url)
 	try {
 		await db.query(
 			`UPDATE visits SET visti = visti + 1 WHERE id = $1`,
