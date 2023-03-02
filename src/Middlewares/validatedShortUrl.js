@@ -1,5 +1,9 @@
+import db from "../Config/db.js";
+
 export const validateShortUrl = async (req, res, next)=> {
 	const { shortUrl } = req.params;
+	console.log(shortUrl)
+	
 	try {
 		const url = await db.query(
 			`SELECT * FROM shortens WHERE short_url = $1`,

@@ -28,7 +28,7 @@ import db from "../Config/db.js"
   const validateId = async (req, res, next) => {
     const { id } = req.params;
     try {
-      const url = await db.query(`SELECT id, short_url ,url FROM shortens WHERE id = $1`, [id]);
+      const url = await db.query(`SELECT id, short_url AS "shortUrl", url FROM shortens WHERE id = $1`, [id]);
       console.log(url.rowCount)
       if (url.rowCount === 0) {
         return res.status(404).send("Not Found");
