@@ -36,13 +36,14 @@ const visitUrl = async (req, res)=>{
 }
 
  const deleteUrl = async (req, res)=>{
-    const { shortUrl } = res.locals;
-	const { userId } = res.locals.token;
+    const { shortUrl } = res.locals.url;
+	const {user_id}  = res.locals.token;
+	const userId = user_id
   try {
     
     const result = await db.query('SELECT * FROM shortens WHERE short_url = $1 AND user_id = $2', [shortUrl, userId]);
 
-    if (result.rowCount === 1) {
+    if (result.rowCount > 0) {
       await db.query('DELETE FROM shortens WHERE short_url = $1', [shortUrl]);
       res.sendStatus(204);
     } else {

@@ -31,7 +31,7 @@ import db from "../Config/db.js"
       const url = await db.query(`SELECT id, short_url AS "shortUrl", url FROM shortens WHERE id = $1`, [id]);
     
       if (url.rowCount === 0) {
-        return res.status(404).send("Not Found");
+        return res.status(404).send();
       }
       res.locals.url = url.rows[0];
       next();
