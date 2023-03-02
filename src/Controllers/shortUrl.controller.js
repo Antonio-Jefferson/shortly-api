@@ -27,7 +27,7 @@ const showUrl = (_, res)=>{
 }
 
 const visitUrl = async (req, res)=>{
-    const { url } = res.locals;
+    const { url } = res.locals.url;
 	try {
 		res.redirect(url);
 	} catch (error) {
@@ -36,14 +36,14 @@ const visitUrl = async (req, res)=>{
 }
 
  const deleteUrl = async (req, res)=>{
-    const { shortUrl } = res.locals.url;
+    const { shortUrl } = res.locals;
 	const { userId } = res.locals.token;
   try {
     
-    const result = await pool.query('SELECT * FROM shortens WHERE short_url = $1 AND user_id = $2', [shortUrl, userId]);
+    const result = await db.query('SELECT * FROM shortens WHERE short_url = $1 AND user_id = $2', [shortUrl, userId]);
 
     if (result.rowCount === 1) {
-      await pool.query('DELETE FROM shortens WHERE short_url = $1', [shortUrl]);
+      await db.query('DELETE FROM shortens WHERE short_url = $1', [shortUrl]);
       res.sendStatus(204);
     } else {
       res.status(401).send('URL não pertence ao usuário autenticado');

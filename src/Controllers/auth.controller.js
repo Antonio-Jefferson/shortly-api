@@ -25,6 +25,7 @@ const signIn = async (req, res)=>{
     if(result.rowCount > 0){
       await db.query(`INSERT INTO sessions (user_id, token) VALUES ($1, $2);`,
       [user_id, token])  
+      
       return res.status(200).send({token})
     }
 

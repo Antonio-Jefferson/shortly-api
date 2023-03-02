@@ -16,6 +16,7 @@ export async function authValidation(req, res, next) {
     res.status(500).send(error)
   }
 }
+
 export async function auth(req, res, next) {
   const { authorization } = req.headers
   const token = authorization?.replace("Bearer ", '')
