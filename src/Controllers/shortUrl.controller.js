@@ -27,12 +27,8 @@ const showUrl = (_, res)=>{
 }
 
 const visitUrl = async (req, res)=>{
-    const { id, url } = res.locals.url;
+    const { url } = res.locals;
 	try {
-		await db.query(
-			`UPDATE visits SET visti = visti + 1 WHERE id = $1`,
-			[id]
-		);
 		res.redirect(url);
 	} catch (error) {
 		res.status(500).send(error.message);
@@ -40,20 +36,21 @@ const visitUrl = async (req, res)=>{
 }
 
  const deleteUrl = async (req, res)=>{
-    const { id } = res.locals.url;
+    const { shortUrl } = res.locals.url;
 	const { userId } = res.locals.token;
-	try {
-		const { rows } = await db.query(
-			`SELECT * FROM shortens WHERE user_Id = $1`,[userId]
-		);
-		if (rows.length === 0) {
-			return res.sendStatus(401);
-		}
-		await db.query(`DELETE FROM shortens WHERE id = $1`, [id]);
-		res.status(204).send();
-	} catch (error) {
-		res.status(500).send(error.message);
-	}
+  try {
+    
+    const result = await pool.query('SELECT * FROM shortens WHERE short_url = $1 AND user_id = $2', [shortUrl, userId]);
+
+    if (result.rowCount === 1) {
+      await pool.query('DELETE FROM shortens WHERE short_url = $1', [shortUrl]);
+      res.sendStatus(204);
+    } else {
+      res.status(401).send('URL não pertence ao usuário autenticado');
+    }
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
 
 }
 export {isertShortUrl, showUrl, visitUrl, deleteUrl}
