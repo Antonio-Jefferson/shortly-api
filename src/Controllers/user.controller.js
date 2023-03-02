@@ -1,8 +1,10 @@
 import db from "../Config/db.js"
 
 export const getByIdUser = async (req, res) => {
-    const { user } = res.locals
-    const userId = user
+    const {user_id}  = res.locals.token;
+	const userId = user_id
+    console.log(user_id)
+  
     try {
         const result = await db.query(`
         SELECT 
