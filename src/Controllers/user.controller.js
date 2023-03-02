@@ -48,8 +48,8 @@ export const getRanking = async (_, res) => {
         SELECT 
             u.id,
             u.name,
-            COALESCE(COUNT(DISTINCT s.id), 0) as linksCount,
-            COALESCE(SUM(v.visti), 0) as visitCount
+            COALESCE(COUNT(DISTINCT s.id), 0) as "linksCount",
+            COALESCE(SUM(v.visti), 0) as "visitCount"
         FROM 
             users u
         LEFT JOIN 
