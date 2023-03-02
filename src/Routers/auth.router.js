@@ -7,6 +7,6 @@ import { GeneralValidation } from "../Middlewares/GeneralValidation.js";
 const authRouter = Router();
 
 authRouter.post("/signup",validatUser, GeneralValidation(userValidation), signUp)
-authRouter.post("/signin",signInValidation, GeneralValidation(loginValidation), signIn)
+authRouter.post("/signin",GeneralValidation(loginValidation), signInValidation,  signIn)
 
 export default authRouter

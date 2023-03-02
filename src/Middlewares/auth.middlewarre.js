@@ -5,12 +5,11 @@ export async function authValidation(req, res, next) {
   const token = authorization?.replace("Bearer ", '')
 
   if (!token) return res.status(422).send("Informe o token!")
-
   try {
-    const checkSession = await db.query(`SELECT * FROM sessions WHERE token = $1 `,[token] )
-    if (!result.rowCount > 0) return res.status(401).send("Você não possue acesso!")
-    res.locals.token = checkSession.rows[0].id
-    console.log('cheguei no token')
+    const checkSession = await db.query(`SELECT * FROM sessions WHERE token = $1 `,[token])
+    if (checkSession.rowCount === 0) return res.status(401).send("Você não possue acesso!")
+    const id = checkSession.rows[0].user_id
+    res.locals.token = id
     next()
 
   } catch (error) {
