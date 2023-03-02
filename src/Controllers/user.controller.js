@@ -10,7 +10,7 @@ export const getByIdUser = async (req, res) => {
         SELECT 
         users.id,
         users.name,
-        COALESCE(SUM(visits.visti), 0) as visitCount,
+        COALESCE(SUM(visits.visti), 0) as "visitCount",
         json_agg(
             json_build_object(
                 'id', shortens.id,
@@ -18,7 +18,7 @@ export const getByIdUser = async (req, res) => {
                 'url', shortens.url,
                 'visitCount', COALESCE(visits.visti, 0)
             ) ORDER BY shortens.id
-        ) as shortenedUrls
+        ) as "shortenedUrls"
     FROM 
         users 
     LEFT JOIN 
