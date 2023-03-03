@@ -46,28 +46,29 @@ export const getRanking = async (_, res) => {
     try {
         const { rows } = await db.query(`
         SELECT 
-            u.id,
-            u.name,
-            COALESCE(COUNT(DISTINCT s.id), 0) as "linksCount",
-            COALESCE(SUM(v.visti), 0) as "visitCount"
+          users.id, 
+          users.name, 
+          COUNT(DISTINCT shortens.id) AS "linksCount", 
+          COALESCE(SUM(visits.visit_count), 0) AS "visitCount" 
         FROM 
-            users u
+          users 
         LEFT JOIN 
-            shortens s ON u.id = s.user_id
+          shortens ON users.id = shortens.user_id 
         LEFT JOIN 
-            (SELECT 
-                short_id, SUM(visti) as visti 
-            FROM 
-                visits 
-            GROUP BY 
-                short_id) v ON s.id = v.short_id
+          (SELECT 
+            short_id, 
+            COUNT(*) AS visit_count 
+          FROM 
+            visits 
+          GROUP BY 
+            short_id) AS visits ON shortens.id = visits.short_id 
         GROUP BY 
-            u.id
+          users.id 
         ORDER BY 
-            u.id
-        LIMIT
-            10
-        `);
+          "visitCount" DESC 
+        LIMIT 
+          10
+      `);
         res.status(200).send(rows);
     } catch (error) {
         res.status(500).send(error.message);
